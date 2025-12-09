@@ -9,9 +9,9 @@
     "preview": "vite preview"
   },
   "devDependencies": {
-    "vite": "^7.2.4",
     "@riotjs/compiler": "^10.0.1",
     "riot": "^10.1.2",
-    "rollup-plugin-riot": "^10.0.0"
+    "rollup-plugin-riot": "^10.0.0",
+    "vite": "^7.2.4"
   }
 }
