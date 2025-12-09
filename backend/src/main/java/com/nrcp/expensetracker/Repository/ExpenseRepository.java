@@ -1,6 +1,6 @@
-package com.nrcp.expensetracker.Repository;
+package com.nrcp.expensetracker.repository;
 
-import com.nrcp.expensetracker.Model.Expense;
+import com.nrcp.expensetracker.model.Expense;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
