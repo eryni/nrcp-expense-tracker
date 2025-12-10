@@ -33,22 +33,3 @@ public interface ExpenseRepository extends JpaRepository<Expense, Long> {
     @Query("SELECT SUM(e.baseCurrencyAmount) FROM Expense e WHERE e.datePurchased BETWEEN :startDate AND :endDate AND e.isDeleted = false")
     Double getTotalSpentBetweenDates(LocalDate startDate, LocalDate endDate);
 }
-
-// ActionLogRepository.java
-package com.nrcp.expensetracker.repository;
-
-import com.nrcp.expensetracker.model.ActionLog;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
-
-import java.util.List;
-
-@Repository
-public interface ActionLogRepository extends JpaRepository<ActionLog, Long> {
-    
-    // Find logs by user
-    List<ActionLog> findByUserEmail(String userEmail);
-    
-    // Find logs by target
-    List<ActionLog> findByTargetTableAndTargetId(String targetTable, Long targetId);
-}
