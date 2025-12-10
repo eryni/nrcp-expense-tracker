@@ -23,13 +23,13 @@ public interface ExpenseRepository extends JpaRepository<Expense, Long> {
     // Find expenses by user
     List<Expense> findByLoggedByAndIsDeletedFalse(String loggedBy);
     
-    // Custom query for summary statistics
-    @Query("SELECT SUM(e.baseCurrencyAmount) FROM Expense e WHERE e.isDeleted = false")
+    // FIX: Using totalSpent for consistency with service logic
+    @Query("SELECT SUM(e.totalSpent) FROM Expense e WHERE e.isDeleted = false")
     Double getTotalSpent();
     
-    @Query("SELECT SUM(e.baseCurrencyAmount) FROM Expense e WHERE e.datePurchased = :date AND e.isDeleted = false")
+    @Query("SELECT SUM(e.totalSpent) FROM Expense e WHERE e.datePurchased = :date AND e.isDeleted = false")
     Double getTotalSpentByDate(LocalDate date);
     
-    @Query("SELECT SUM(e.baseCurrencyAmount) FROM Expense e WHERE e.datePurchased BETWEEN :startDate AND :endDate AND e.isDeleted = false")
+    @Query("SELECT SUM(e.totalSpent) FROM Expense e WHERE e.datePurchased BETWEEN :startDate AND :endDate AND e.isDeleted = false")
     Double getTotalSpentBetweenDates(LocalDate startDate, LocalDate endDate);
 }

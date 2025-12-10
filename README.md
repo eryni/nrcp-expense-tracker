@@ -1,4 +1,4 @@
-## README: Expense Tracker Application
+# Expense Tracker Application
 
 This repository contains the full-stack Expense Tracker application, developed with a Spring Boot backend and a modern Vue 3 frontend. The application allows users to log and review daily, weekly, and total expenses, meeting the core objectives of the project brief.
 
@@ -18,7 +18,7 @@ The application is built using a modern stack designed for rapid development and
 | **Package Manager** | npm | 10.8.2 | Package manager for frontend dependencies. |
 | **Version Control** | Git | 2.52.0 | Version Control System used for atomic commits. |
 
-### 💡 Project Context & Development Notes
+### Project Context & Development Notes
 
 This project was initiated using the **Spring Initializer** for the backend foundation. The initial plan involved using Riot.js for the frontend via Vite, but due to technical difficulties with the custom component resolution pipeline in the Vite/Riot setup, the decision was made to switch to **Vue.js** (Vue 3 with `<script setup>` style) to stabilize the frontend environment quickly.
 
@@ -30,17 +30,17 @@ Follow these steps to clone the repository, set up the database, and run both th
 
 You must ensure your local MySQL server is running on the default port (`3306`) before starting the backend.
 
-1.  **Initialize Database:** Execute the provided setup script to create the `expense_tracker` database and the `expense_tracker` user/password (`nrcp`).
+ 1. **Verify Configuration:** Edit the backend's configuration file:
+
+      * Navigate to `backend/src/main/resources/application.properties`.
+      * **Uncomment the section** for `LOCAL DEVELOPMENT ENVIRONMENT` (containing `localhost:3306`, `username=expense_tracker`, `password=nrcp`).
+
+2.  **Initialize Database:** Execute the provided setup script to create the `expense_tracker` database and the `expense_tracker` user/password (`nrcp`).
 
     ```bash
     # Navigate to the directory containing setup.sql
     mysql -u root -p < setup.sql
     ```
-
-2.  **Verify Configuration:** Edit the backend's configuration file:
-
-      * Navigate to `backend/src/main/resources/application.properties`.
-      * **Uncomment the section** for `LOCAL DEVELOPMENT ENVIRONMENT` (containing `localhost:3306`, `username=expense_tracker`, `password=nrcp`).
 
 #### II. Backend Setup (Spring Boot)
 
@@ -73,3 +73,5 @@ You must ensure your local MySQL server is running on the default port (`3306`) 
     ```
 
 The application will be accessible at `http://localhost:5173/`.
+
+The application is currently deployed through Vercel and Railway at 
