@@ -144,10 +144,20 @@ curl -X POST http://localhost:8080/api/expenses \
   }'
 {"error":"Resource Not Found","message":"Validation failed: Total spent (100.00) mismatch: expected 52.50","timestamp":"2025-12-10T08:23:29.580094","status":404}%    
 
-
-
-
-
-
-
+## Fixed globalexceptionhandler to properly handle err 400 instead of wrong 404 status
+curl -X POST http://localhost:8080/api/expenses \
+  -H "Content-Type: application/json" \
+  -d '{
+    "loggedBy": "test@example.com",
+    "category": "Food",
+    "purposeItem": "Groceries",
+    "quantity": 5,
+    "pricePer": 10.50,
+    "datePurchased": "2025-12-09",
+    "totalSpent": 100.00,
+    "currencySpent": "PHP",
+    "exchangeRate": 1.0,
+    "baseCurrencyAmount": 100.00
+  }'
+{"error":"Business Validation Failed","message":"Validation failed: Total spent (100.00) mismatch: expected 52.50","timestamp":"2025-12-10T08:27:21.330524","status":400}%    
 
