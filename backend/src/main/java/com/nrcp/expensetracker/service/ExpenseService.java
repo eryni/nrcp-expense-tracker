@@ -73,9 +73,15 @@ public class ExpenseService {
   // Update expense
   @Transactional
   public Expense updateExpense(Long id, Expense expenseDetails) {
+    // 1. Fetch the expense (findById retrieves the record regardless of isDeleted status)
     Expense expense = expenseRepository.findById(id)
         .orElseThrow(() -> new RuntimeException("Expense not found with id: " + id));
     
+    // 2. FIX: Prevent updating deleted expenses
+    if (expense.getIsDeleted()) {
+        throw new IllegalArgumentException("Cannot update a deleted expense");
+    }
+        
     // Perform business validation
     List<String> validationErrors = validationService.validateExpense(expenseDetails);
     if (!validationErrors.isEmpty()) {
