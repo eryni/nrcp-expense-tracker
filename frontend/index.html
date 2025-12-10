@@ -1,13 +1,29 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>frontend</title>
-  </head>
-  <body>
-    <div id="app"></div>
-    <script type="module" src="/src/main.js"></script>
-  </body>
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/svg+xml" href="/vite.svg">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Tracker - Riot.js & Spring Boot</title>
+    
+    <style>
+        /* Basic reset for consistent rendering across browsers */
+        body { margin: 0; font-family: sans-serif; background-color: #f4f4f4; }
+        /* Style the root app component container */
+        #app { 
+            display: flex;
+            justify-content: center;
+            padding: 24px; /* Consistent spacing using 8px grid (24px = 3 * 8px) */
+            max-width: 900px; /* Readability max-width for content container */
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        Loading Expense Tracker...
+    </div>
+    
+    <script type="module" src="/main.js"></script>
+</body>
 </html>
