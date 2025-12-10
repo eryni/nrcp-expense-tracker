@@ -161,3 +161,139 @@ curl -X POST http://localhost:8080/api/expenses \
   }'
 {"error":"Business Validation Failed","message":"Validation failed: Total spent (100.00) mismatch: expected 52.50","timestamp":"2025-12-10T08:27:21.330524","status":400}%    
 
+# TEST the ActionLog Feature
+
+curl -X POST http://localhost:8080/api/expenses \
+  -H "Content-Type: application/json" \
+  -d '{
+    "loggedBy": "test@example.com",
+    "category": "Food",
+    "purposeItem": "Test Item",
+    "quantity": 2,
+    "pricePer": 25.00,
+    "datePurchased": "2025-12-10",
+    "totalSpent": 50.00,
+    "currencySpent": "PHP",
+    "exchangeRate": 1.0,
+    "baseCurrencyAmount": 50.00
+  }'
+{"baseCurrencyAmount":50.00,"category":"Food","currencySpent":"PHP","dateLogged":"2025-12-10T08:39:06.835741","datePurchased":"2025-12-10","exchangeRate":1.0,"expenseId":2,"isDeleted":false,"loggedBy":"test@example.com","pricePer":25.00,"purposeItem":"Test Item","quantity":2,"totalSpent":50.00}%       
+
+curl http://localhost:8080/api/logs
+[{"actionType":"ADDED","targetTable":"expense","targetId":2,"userEmail":"test@example.com","actionId":1,"actionTimestamp":"2025-12-10T08:39:07"}]%       
+
+ curl http://localhost:8080/api/logs/expense/1
+[]%    
+
+
+
+ curl http://localhost:8080/api/logs/user/test@example.com
+[{"actionType":"ADDED","targetTable":"expense","targetId":2,"userEmail":"test@example.com","actionId":1,"actionTimestamp":"2025-12-10T08:39:07"}]%  
+
+ curl -X PUT http://localhost:8080/api/expenses/1 \
+  -H "Content-Type: application/json" \
+  -d '{
+    "loggedBy": "test@example.com",
+    "category": "Food",
+    "purposeItem": "Updated Item",
+    "quantity": 3,
+    "pricePer": 25.00,
+    "datePurchased": "2025-12-10",
+    "totalSpent": 75.00,
+    "currencySpent": "PHP",
+    "exchangeRate": 1.0,
+    "baseCurrencyAmount": 75.00
+  }'
+{"baseCurrencyAmount":75.00,"category":"Food","currencySpent":"PHP","dateLogged":"2025-12-10T07:58:21","datePurchased":"2025-12-10","exchangeRate":1.0,"expenseId":1,"isDeleted":true,"loggedBy":"test@example.com","pricePer":25.00,"purposeItem":"Updated Item","quantity":3,"totalSpent":75.00}%  
+
+
+curl -X DELETE "http://localhost:8080/api/expenses/1?userEmail=test@example.com"
+
+## Edited soft delete shouldn't be updated
+curl -X POST http://localhost:8080/api/expenses \
+  -H "Content-Type: application/json" \
+  -d '{
+    "loggedBy": "audit@example.com",
+    "category": "Transport",
+    "purposeItem": "Taxi",
+    "quantity": 1,
+    "pricePer": 100.00,
+    "datePurchased": "2025-12-10",
+    "totalSpent": 100.00,
+    "currencySpent": "PHP",
+    "exchangeRate": 1.0,
+    "baseCurrencyAmount": 100.00
+  }'
+
+curl http://localhost:8080/api/logs
+
+curl -X PUT http://localhost:8080/api/expenses/3 \
+  -H "Content-Type: application/json" \
+  -d '{
+    "loggedBy": "audit@example.com",
+    "category": "Transport",
+    "purposeItem": "Taxi - Updated",
+    "quantity": 1,
+    "pricePer": 150.00,
+    "datePurchased": "2025-12-10",
+    "totalSpent": 150.00,
+    "currencySpent": "PHP",
+    "exchangeRate": 1.0,
+    "baseCurrencyAmount": 150.00
+  }'
+
+  curl http://localhost:8080/api/logs
+
+  curl -X DELETE "http://localhost:8080/api/expenses/3?userEmail=audit@example.com"
+
+curl http://localhost:8080/api/logs
+
+curl http://localhost:8080/api/logs/expense/3
+
+[
+  {
+    "actionType": "ADDED",
+    "targetTable": "expense",
+    "targetId": 3,
+    "userEmail": "audit@example.com",
+    "actionId": 3,
+    "actionTimestamp": "2025-12-10T08:43:53"
+  },
+  {
+    "actionType": "UPDATED",
+    "targetTable": "expense",
+    "targetId": 3,
+    "userEmail": "audit@example.com",
+    "actionId": 4,
+    "actionTimestamp": "2025-12-10T08:43:53"
+  },
+  {
+    "actionType": "DELETED",
+    "targetTable": "expense",
+    "targetId": 3,
+    "userEmail": "audit@example.com",
+    "actionId": 5,
+    "actionTimestamp": "2025-12-10T08:43:53"
+  }
+]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
