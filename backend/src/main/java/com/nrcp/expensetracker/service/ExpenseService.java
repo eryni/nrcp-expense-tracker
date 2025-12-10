@@ -14,10 +14,13 @@ import java.util.Optional;
 public class ExpenseService {
     
     private final ExpenseRepository expenseRepository;
+    private final ExpenseValidationService validationService;
     
     @Autowired
-    public ExpenseService(ExpenseRepository expenseRepository) {
+    public ExpenseService(ExpenseRepository expenseRepository, 
+                         ExpenseValidationService validationService) {
         this.expenseRepository = expenseRepository;
+        this.validationService = validationService;
     }
     
     // Get all non-deleted expenses
@@ -44,6 +47,12 @@ public class ExpenseService {
     // Create new expense
     @Transactional
     public Expense createExpense(Expense expense) {
+        // Perform business validation
+        List<String> validationErrors = validationService.validateExpense(expense);
+        if (!validationErrors.isEmpty()) {
+            throw new IllegalArgumentException("Validation failed: " + String.join("; ", validationErrors));
+        }
+        
         Expense saved = expenseRepository.save(expense);
         // TODO: Add action logging when ActionLog is implemented
         return saved;
@@ -54,6 +63,12 @@ public class ExpenseService {
     public Expense updateExpense(Long id, Expense expenseDetails) {
         Expense expense = expenseRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("Expense not found with id: " + id));
+        
+        // Perform business validation
+        List<String> validationErrors = validationService.validateExpense(expenseDetails);
+        if (!validationErrors.isEmpty()) {
+            throw new IllegalArgumentException("Validation failed: " + String.join("; ", validationErrors));
+        }
         
         // Update allowed fields
         expense.setCategory(expenseDetails.getCategory());
@@ -68,7 +83,6 @@ public class ExpenseService {
         
         Expense updated = expenseRepository.save(expense);
         // TODO: Add action logging when ActionLog is implemented
-        
         return updated;
     }
     
