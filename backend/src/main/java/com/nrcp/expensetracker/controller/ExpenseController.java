@@ -2,6 +2,7 @@ package com.nrcp.expensetracker.controller;
 
 import com.nrcp.expensetracker.model.Expense;
 import com.nrcp.expensetracker.service.ExpenseService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -58,8 +59,8 @@ public class ExpenseController {
     
     // Create new expense
     @PostMapping
-    public ResponseEntity<Expense> createExpense(@RequestBody Expense expense) {
-        // TODO: Add validation in Phase 2
+    public ResponseEntity<Expense> createExpense(@Valid @RequestBody Expense expense) {
+        // Validation handled by @Valid annotation
         // TODO: Get loggedBy from authentication in Phase 3
         Expense created = expenseService.createExpense(expense);
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
@@ -69,13 +70,10 @@ public class ExpenseController {
     @PutMapping("/{id}")
     public ResponseEntity<Expense> updateExpense(
             @PathVariable Long id, 
-            @RequestBody Expense expense) {
-        try {
-            Expense updated = expenseService.updateExpense(id, expense);
-            return ResponseEntity.ok(updated);
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
+            @Valid @RequestBody Expense expense) {
+        // Validation handled by @Valid annotation
+        Expense updated = expenseService.updateExpense(id, expense);
+        return ResponseEntity.ok(updated);
     }
     
     // Delete expense (soft delete)
@@ -83,12 +81,8 @@ public class ExpenseController {
     public ResponseEntity<Void> deleteExpense(
             @PathVariable Long id, 
             @RequestParam(required = false, defaultValue = "system") String userEmail) {
-        try {
-            expenseService.deleteExpense(id, userEmail);
-            return ResponseEntity.noContent().build();
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
+        expenseService.deleteExpense(id, userEmail);
+        return ResponseEntity.noContent().build();
     }
     
     // Get summary statistics
